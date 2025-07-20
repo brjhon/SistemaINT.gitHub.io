@@ -32,6 +32,36 @@ body::before {
   box-sizing: border-box;
 }
 
+/* Cabeçalho com fundo “decorativo” */
+.top-header{
+  position:relative;
+  height:220px;          /* ajuste a altura que preferir */
+  width:100%;
+  background:linear-gradient(135deg,#003b6f 0%,#15a1b8 100%);
+    background:
+    radial-gradient(at 80% 10%,rgba(255,255,255,.04) 0%,transparent 70%),
+    url("img/fundo.png") center/cover,
+    linear-gradient(135deg,#003b6f 0%,#15a1b8 100%);
+}
+
+/* Texto centralizado sobre o fundo */
+.banner-title{
+  position:absolute;
+  left:50%; top:50%;
+  transform:translate(-50%,-50%);
+  margin:0;
+  font:700 2.8rem/1 "Inter",sans-serif;
+  color:#fff;
+  text-shadow:0 2px 6px #0005;
+  pointer-events:none;   /* evita cliques acidentais */
+}
+
+/* Responsividade: título menor em telas estreitas */
+@media(max-width:600px){
+  .banner-title{ font-size:2rem; }
+}
+
+
 header .span{ 
   position: absolute;
 
@@ -1239,6 +1269,10 @@ header img {
   .seletor-estagio img#estagioImgBanner,
   .seletor-calor  img#calorImgBanner {
     display: none !important;
+  }
+
+  .banner-title{ 
+    font-size:2rem; 
   }
 
   /* ——— Menus em full-screen, mas sempre ocultos por padrão ——— */
