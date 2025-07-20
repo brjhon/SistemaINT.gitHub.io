@@ -15,7 +15,7 @@ body::before {
   background-size: cover;
   z-index: -1; /* fica atrás do conteúdo */
 }
-.left-column
+
   header {
   position: fixed;
   top: 0;
@@ -329,7 +329,7 @@ header img {
     box-shadow: 0 0 20px rgba(0,0,0,0.4);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     margin-bottom: 20px;
-    z-index: 100 /* z-index alto para ficar acima de outros elementos */
+    z-index: 000 ;/* z-index alto para ficar acima de outros elementos */
   }
 
   .left-column:hover {

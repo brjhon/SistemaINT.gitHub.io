@@ -8,15 +8,12 @@
 </head>
 <body>
 <header style="position:relative; width:100%; height:180px;">
-  <!-- Banner institucional de fundo -->
-  <img alt="" src="img/fundo.png"
-    style="width:100%; height:180px; object-fit:cover; border-radius:0; position:absolute; left:0; top:0; z-index:1;">
-
+  <h1 class="banner-title">Sistema de Integração</h1>
   <!-- Seletor de estágio flutuando -->
   <div class="seletor-estagio"
     style="position:absolute; top:0px; left:0px; z-index:10;">
     <div id="estagioBanner" style="cursor:pointer; position:relative; width:320px; height:179px;">
-      <img id="estagioImgBanner" src="estagios/estagio1.jpg" alt="Estágio Atual"
+      <img id="estagioImgBanner" src="Modulo1/" alt="Estágio Atual"
         style="width:100%; height:100%; object-fit:cover; border-radius:14px; box-shadow:0 2px 12px #0005;">
       <div id="menuEstagios"
         style="display:none; position:absolute; top:auto; left:0; width:320px; background:#222e; border-radius:0 0 14px 14px; z-index:100;">
@@ -37,7 +34,7 @@
 
     <div class=" seletor-calor" style="position:absolute; top:0px; right:0px; z-index:10;">
   <div id="calorBanner" style="cursor:pointer; position:relative; width:320px; height:179px;">
-    <img id="calorImgBanner" src="nils-calor/calor1.jpg" alt="Calor Atual"
+    <img id="calorImgBanner" src="Modulo2/" alt="Calor Atual"
       style="width:100%; height:100%; object-fit:cover; border-radius:14px; box-shadow:0 2px 12px #0005;">
     <div id="menuCalor"
       style="display:none; position:absolute; top:auto; left:0; width:320px; background:#222e; border-radius:14px 14px 14px 14px; z-index:100;">
@@ -253,14 +250,12 @@
   </div>
 </main>
 
-
-
 <!-- Modal de Detalhes de Equipamento -->
 <div id="modalDetalhesEquipamento" class="modal" style="display: none;">
   <div class="modal-content">
     <h3>Detalhes do Equipamento</h3>
     <p id="detalhesTexto"></p>
-    <button id="btnCopiarDetalhes" class="test-button">📋 Copiar Dados</button>
+    <button id="btnCopiarDetalhes" class="test-button">📋 </button>
     <button id="btnFecharDetalhes" class="clear-button">Fechar</button>
   </div>
 </div>
@@ -347,9 +342,9 @@ for (let i = 1; i <= totalEstagios; i++) {
   item.className = 'estagio-item' + (i === estagioAtual ? ' selected' : '');
   const mini = document.createElement('img');
   mini.src = `${pastaEstagios}/estagio${i}${extensao}`;
-  mini.alt = `Miniatura Estágio ${i}`;
+  mini.alt = `Miniatura imagem ${i}`;
   const label = document.createElement('span');
-  label.textContent = `Estágio ${i}`;
+  label.textContent = `Modulo ${i}`;
   item.appendChild(mini);
   item.appendChild(label);
 
@@ -373,9 +368,9 @@ for (let i = 1; i <= totalCalor; i++) {
   item.className = 'calor-item' + (i === calorAtual ? ' selected' : '');
   const mini = document.createElement('img');
   mini.src = `${pastaCalor}/calor${i}${extCalor}`;
-  mini.alt = `Miniatura Calor ${i}`;
+  mini.alt = `Miniatura Img ${i}`;
   const label = document.createElement('span');
-  label.textContent = `Calor ${i}`;
+  label.textContent = `Modulo ${i}`;
   item.appendChild(mini);
   item.appendChild(label);
 
