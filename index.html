@@ -9,33 +9,6 @@
 <body>
 <header class="top-header" style="position:relative; width:100%; height:180px;">
   <h1 class="banner-title">Sistema de Integração</h1>
-  <!-- Seletor de estágio flutuando -->
-  <div class="seletor-estagio"
-   
-        style="width:100%; height:100%; object-fit:cover; border-radius:14px; box-shadow:0 2px 12px #0005;">
-      <div id="menuEstagios"
-        style="display:none; position:absolute; top:auto; left:0; width:320px; background:#222e; border-radius:0 0 14px 14px; z-index:100;">
-        <!-- Itens criados pelo JS -->
-        <button id="btnAbrirVisualizador"
-          style="width:90%;margin:14px 5%;background:#2979ff;color:#fff;font-size:1.05em;border:none;padding:10px;border-radius:7px;cursor:pointer;">
-          Abrir em tela cheia
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Painel direito ou outros elementos do header -->
- 
-
-    <div class=" seletor-calor" style="position:absolute; top:0px; right:0px; z-index:10;">
-  <div id="calorBanner" style="cursor:pointer; position:relative; width:320px; height:179px;">
-    <div id="menuCalor"
-      style="display:none; position:absolute; top:auto; left:0; width:320px; background:#222e; border-radius:14px 14px 14px 14px; z-index:100; transparent;">
-      <!-- Itens criados pelo JS -->
-    </div>
-  </div>
-</div>
-
 </header>
 
 <div class="top-buttons">
@@ -43,13 +16,6 @@
   <button class="action-button" id="btnAnyDesk">Conexões AnyDesk</button>
   <button class="action-button" id="btnAcessosRemotos">Infraestrutura Remota</button>
   <button id="btn-var-legal" class="top-btn">Painel de Acesso Rápido</button>
-
-  <!-- Botão para abrir o modal (só aparece no mobile) -->
-  <button id="btnAbrirModalSeletores" class="btn-modal-seletores" title="Selecionar Estágio / Calor">
-    Selecionar Estágio / Calor
-  </button>
-
-
 </div>
  
 <!-- Área Sites -->
@@ -92,7 +58,6 @@
       </div>
     </div>
   </div>
-
   <div class="right-column">
     <h2>🗂️ Sistemas Registrados</h2>
     <input id="searchInput" placeholder="Buscar sistema pelo nome..." type="text"/>
@@ -284,7 +249,7 @@
   };
 
   const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+  const db = getFirestore(app, "portfolio");
   const sitesCollection = collection(db, "sites");
   const anydeskCollection = collection(db, "anydesk");
   const acessosRemotosCollection = collection(db, "acessos_remotos")
@@ -295,35 +260,6 @@
   const btnStart = document.getElementById('btnStartCam');
   const btnSnap  = document.getElementById('btnSnap');
 
-  /* Parte de Nivels de Calor */
-  const estagioImgBanner = document.getElementById("estagioImgBanner");
-  const estagioBanner = document.getElementById("estagioBanner");
-  const menuEstagios = document.getElementById("menuEstagios");
-  const btnAbrirVisualizador = document.getElementById("btnAbrirVisualizador");
-
-  /* Parte de Estagio */
-  const calorImgBanner = document.getElementById("calorImgBanner");
-  const calorBanner = document.getElementById("calorBanner");
-  const menuCalor = document.getElementById("menuCalor");
-  const btnAbrirVisualizadorCalor = document.getElementById("btnAbrirVisualizadorCalor");
-
-  // Botões de abertura dos menus
-  const btnSeletores    = document.getElementById("btnAbrirModalSeletores");
-  const bannerEstagio   = document.getElementById("estagioBanner");
-  const bannerCalor     = document.getElementById("calorBanner");  
-  let stream;
-
-  // Seletor de estágio
-  const totalEstagios = 5;
-  const pastaEstagios = "estagios";
-  const extensao = ".jpg";
-  let estagioAtual = 1;
-
-  // Seletor de Niveis de Calor
-  const totalCalor = 5;
-  const pastaCalor = "nils-calor";
-  const extCalor = ".jpg";
-  let calorAtual = 1;
 
 /* Seletor do Gerenciar Sistemas Web */
   let sites = [];
@@ -345,59 +281,6 @@
 
   let editIndex = null;
 
-  // Cria itens do menu de estágios - link que abre em outro navegador
-for (let i = 1; i <= totalEstagios; i++) {
-  const item = document.createElement('div');
-  item.className = 'estagio-item' + (i === estagioAtual ? ' selected' : '');
-  const mini = document.createElement('img');
-  mini.src = `${pastaEstagios}/estagio${i}${extensao}`;
-  mini.alt = `Miniatura imagem ${i}`;
-  const label = document.createElement('span');
-  label.textContent = `Modulo ${i}`;
-  item.appendChild(mini);
-  item.appendChild(label);
-
-  item.dataset.estagio = i;
-  item.addEventListener('click', function (e) {
-    estagioAtual = Number(this.dataset.estagio);
-    estagioImgBanner.src = `${pastaEstagios}/estagio${estagioAtual}${extensao}`;
-    menuEstagios.querySelectorAll('.estagio-item').forEach(el => el.classList.remove('selected'));
-    this.classList.add('selected');
-    menuEstagios.style.display = 'none';
-    atualizarEstagioFirebase(estagioAtual); // Função do Firestore (já existente no seu projeto)
-    e.stopPropagation();
-  });
-  menuEstagios.insertBefore(item, btnAbrirVisualizador);
-}
-  
-// Cria itens do menu de calor
-for (let i = 1; i <= totalCalor; i++) {
-
-  const item = document.createElement('div');
-  item.className = 'calor-item' + (i === calorAtual ? ' selected' : '');
-  const mini = document.createElement('img');
-  mini.src = `${pastaCalor}/calor${i}${extCalor}`;
-  mini.alt = `Miniatura Img ${i}`;
-  const label = document.createElement('span');
-  label.textContent = `Modulo ${i}`;
-  item.appendChild(mini);
-  item.appendChild(label);
-
-  item.dataset.calor = i;
-  item.addEventListener('click', function (e) {
-    calorAtual = Number(this.dataset.calor);
-    calorImgBanner.src = `${pastaCalor}/calor${calorAtual}${extCalor}`;
-    menuCalor.querySelectorAll('.calor-item').forEach(el => el.classList.remove('selected'));
-    this.classList.add('selected');
-    menuCalor.style.display = 'none';
-      atualizarCalorFirebase(calorAtual);
-    e.stopPropagation();
-  });
-  menuCalor.insertBefore(item, btnAbrirVisualizadorCalor);
-}
-
-buscarEstagioInicial();
-buscarCalorInicial();
 
   function updateContadoresRemotos() {
   const total = acessosRemotos.length;
@@ -504,40 +387,6 @@ buscarCalorInicial();
     document.getElementById("offlineExportCount").textContent = `(${offline})`;
   }
 
-  async function atualizarEstagioFirebase(estagioAtual) {
-    await setDoc(doc(db, "painel", "estagio_atual"), { valor: estagioAtual });
-}
-
-  async function atualizarCalorFirebase(calorAtual) {
-    await setDoc(doc(db, "painel", "calor_atual"), { valor: calorAtual });
-}
-
-  async function buscarEstagioInicial() {
-  console.log("Rodando buscarEstagioInicial...");
-  const docSnap = await getDoc(doc(db, "painel", "estagio_atual"));
-  if (docSnap.exists() && docSnap.data().valor) {
-    estagioAtual = docSnap.data().valor;
-    estagioImgBanner.src = `${pastaEstagios}/estagio${estagioAtual}${extensao}`;
-    // Atualiza o menu de seleção (deixa selecionado o correto)
-    menuEstagios.querySelectorAll('.estagio-item').forEach((el, i) => {
-      el.classList.toggle('selected', i+1 === estagioAtual);
-    });
-    console.log("Estágio inicial do Firestore:", estagioAtual);
-  }
-}
-
-  async function buscarCalorInicial() {
-  console.log("Rodando buscarCalorInicial...");
-  const docSnap = await getDoc(doc(db, "painel", "calor_atual"));
-  if (docSnap.exists() && docSnap.data().valor) {
-    calorAtual = docSnap.data().valor;
-    calorImgBanner.src = `${pastaCalor}/calor${calorAtual}${extCalor}`;
-    menuCalor.querySelectorAll('.calor-item').forEach((el, i) => {
-      el.classList.toggle('selected', i+1 === calorAtual);
-    });
-    console.log("Calor inicial do Firestore:", calorAtual);
-  }
-}
 
   /*   Revalida o status de todas as câmeras (Infra Remota). */
   async function recarregarTodosAcessosRemotos() {
@@ -862,23 +711,6 @@ async function testarSite() {
   }
 });
 
-  const images = [
-  "nils-calor/1.jpg",
-  "nils-calor/2.jpg",
-  "nils-calor/3.jpg",
-  "nils-calor/4.jpg",
-  "nils-calor/5.jpg",
-];
-
-  const imgElement = document.getElementById("clicavelImage");
-  let currentIndex = 0;
-
-  imgElement.addEventListener("click", () => {
-  currentIndex = (currentIndex + 1) % images.length;
-  imgElement.src = images[currentIndex];
-});
-
-
 /* Parte onde ficara O script do anydek */
   let acessosAnyDesk = [];
 
@@ -911,7 +743,6 @@ async function testarSite() {
   document.getElementById("loginAny").value = "";
   document.getElementById("senhaAny").value = "";
 }
-
 
   // Lidar com eventos dos botões AnyDesk
   document.getElementById("btnCadastrarAny").addEventListener("click", cadastrarAnyDesk);
@@ -1012,7 +843,6 @@ function renderizarAnyDesk() {
     lista.appendChild(div);
   });
 }
-
 
 // Fora da função! Assim:
 async function removerAnyDesk(id) {
@@ -1301,16 +1131,6 @@ async function testarTodasPortas(ip, id) {
   document.getElementById("modalDetalhesEquipamento").style.display = "none";
 }
 
-  if (!btnSeletores) {
-    console.error("Não encontrei #btnAbrirModalSeletores");
-  } else {
-    // 2) sempre que clicarem, simulam o clique nos banners
-    btnSeletores.addEventListener("click", e => {
-      e.stopPropagation();
-      if (bannerEstagio) bannerEstagio.click();
-      if (bannerCalor)   bannerCalor.click();
-    });
-  }
   
   document.getElementById("btnFecharDetalhes").addEventListener("click", fecharModalDetalhes);
   document.getElementById("btnCopiarDetalhes").addEventListener("click", () => {
@@ -1329,62 +1149,6 @@ window.addEventListener("load", () => {
     document.getElementById("mainAcessosRemotos").style.display = "none";
   });
 
-  // Quando clicar no botão, dispara o mesmo evento de abrir menu do banner
-  // Mostra botão apenas no mobile
-  const btnSeletores = document.getElementById("btnAbrirModalSeletores");
-  if (window.innerWidth <= 600 && btnSeletores) {
-    btnSeletores.style.display = "block";
-    btnSeletores.onclick = function () {
-      let abriu = false;
-      const bannerEstagio = document.getElementById("estagioBanner");
-      const bannerCalor = document.getElementById("calorBanner");
-      if (bannerEstagio) {
-        bannerEstagio.click();
-        abriu = true;
-      }
-      if (bannerCalor) {
-        bannerCalor.click();
-        abriu = true;
-      }
-      if (!abriu) alert('Nenhum seletor disponível!');
-    };
-  }
-
-  // Abrir menu ao clicar no banner
-  estagioBanner.addEventListener('click', function (e) {menuEstagios.style.display = menuEstagios.style.display === 'flex' ? 'none' : 'flex'; e.stopPropagation();
-  });
-
-  // Fecha menu ao clicar fora
-  document.body.addEventListener('click', function () {menuEstagios.style.display = 'none';
-  });
-
-  // Previne fechamento do menu ao clicar dentro
-  menuEstagios.addEventListener('click', function (e) {e.stopPropagation();
-  });
-
-  // Abrir menu ao clicar no banner
-  calorBanner.addEventListener('click', function (e) {menuCalor.style.display = menuCalor.style.display === 'flex' ? 'none' : 'flex';e.stopPropagation();
-  });
-
-  document.body.addEventListener('click', function () {menuCalor.style.display = 'none';
-  });
-
-  menuCalor.addEventListener('click', function (e) {e.stopPropagation();
-  });
-
-  // Botão para abrir o visualizador em tela cheia (estágio)
-  // Estágio
-  btnAbrirVisualizador.addEventListener('click', function () {console.log('Botão Estágio clicado!'); window.open('visualizar.html?tipo=estagio', '_blank');
-  });
-
-  // Botão para abrir o visualizador em tela cheia (calor)
-  // Calor
-  btnAbrirVisualizadorCalor.addEventListener('click', function () {console.log('Botão Calor clicado!');window.open('visualizar.html?tipo=calor', '_blank');
-  });
-
-  const btnSel = document.getElementById("btnAbrirModalSeletores");
-
-
   const btnVarLegal   = document.getElementById('btn-var-legal');
   const overlay       = document.getElementById('modal-overlay');
   const modalCloseBtn = document.getElementById('modal-close');
@@ -1393,7 +1157,6 @@ window.addEventListener("load", () => {
   btnVarLegal.addEventListener('click', () => {
     overlay.classList.remove('hidden');
   });
-
   // Fecha modal ao clicar no “×”
   modalCloseBtn.addEventListener('click', () => {
     overlay.classList.add('hidden');
@@ -1406,30 +1169,18 @@ window.addEventListener("load", () => {
     }
   });
 
-btnSel.addEventListener("click", e => {
-  // alterna a classe open em ambos
-  menuEstagios.classList.toggle("open");
-  menuCalor   .classList.toggle("open");
-  e.stopPropagation();
+
+document.getElementById("btnAnyDesk").addEventListener("click", () => {
+  document.getElementById("mainSites").style.display = "none";
+  document.getElementById("mainAnyDesk").style.display = "flex";
+  document.getElementById("mainAcessosRemotos").style.display = "none";
 });
 
-// fechar menus ao clicar fora
-document.body.addEventListener("click", () => {
-  menuEstagios.classList.remove("open");
-  menuCalor   .classList.remove("open");
+document.getElementById("btnAcessosRemotos").addEventListener("click", () => {
+  document.getElementById("mainSites").style.display = "none";
+  document.getElementById("mainAnyDesk").style.display = "none";
+  document.getElementById("mainAcessosRemotos").style.display = "flex";
 });
-
-  document.getElementById("btnAnyDesk").addEventListener("click", () => {
-    document.getElementById("mainSites").style.display = "none";
-    document.getElementById("mainAnyDesk").style.display = "flex";
-    document.getElementById("mainAcessosRemotos").style.display = "none";
-  });
-
-  document.getElementById("btnAcessosRemotos").addEventListener("click", () => {
-    document.getElementById("mainSites").style.display = "none";
-    document.getElementById("mainAnyDesk").style.display = "none";
-    document.getElementById("mainAcessosRemotos").style.display = "flex";
-  });
 
   // AnyDesk
   document.getElementById("btnCadastrarAny").addEventListener("click", cadastrarAnyDesk);
