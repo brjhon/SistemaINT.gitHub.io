@@ -204,7 +204,7 @@ width: 10%;
   top: 0%;
   left: 0;
   width: 320px;
-  background: #21796c;
+  background: transparent;
   border-radius: 0 0 14px 14px;
   z-index: 100;
   box-shadow: 0 8px 24px #0008;
@@ -740,6 +740,12 @@ header img {
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.4);
   transition: background-color 0.3s ease, transform 0.2s ease;
+  min-width: 120px;
+  padding: 10px;
+  font-size: 14px;
+  text-align: center;
+  background-color: #1c3b3c;
+
 }
 
 .top-buttons button:hover {
@@ -750,18 +756,6 @@ header img {
 .top-buttons button.active {
   background-color: #4caf50;
   color: white;
-}
-.top-buttons button {
-  min-width: 120px;
-  padding: 10px;
-  font-size: 14px;
-  text-align: center;
-  background-color: #1c3b3c;
-  border: none;
-  border-radius: 8px;
-  color: white;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-  transition: all 0.3s ease;
 }
 
 .top-buttons button:hover {
@@ -943,18 +937,19 @@ header img {
   cursor: pointer;
 }
 
-
 /* === Corpo claro, scroll interno === */
 .modal-body {
   padding: 16px;
-  width: 90%;
-  height: 0%;
+  width: 100%;
+  height: auto;
   background-color: transparent;
   flex: 1;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 12px;
+  height: calc(100% - 56px); /* subtrai a altura aproximada do header (por ex. 56px) */
+  background: transparent;
 }
 
 /* === Busca leve === */
@@ -973,7 +968,7 @@ header img {
 .search-input::placeholder {
   color: #999;
 }
-
+.top-buttons
 .search-input:focus {
   outline: none;
   border-color: #144347;
@@ -983,19 +978,30 @@ header img {
 /* oculta scrollbar em WebKit (Chrome, Safari, Edge) */
 .panel-list::-webkit-scrollbar {
   display: none;
+  width: 6px;
+}
+
+.panel-list::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.2);
+  border-radius: 3px;
 }
 /* oculta scrollbar em Firefox */
 .panel-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 16px;
+  height: 0%;
   padding: 16px;
   overflow-y: auto;
+  flex: 1;            /* ocupa todo o espaço restante */
+  overflow-y: auto;   /* habilita scroll vertical */
+  padding-right: 4px; /* pra não cortar o último cartão */
 }
 
 /* === Itens claros com sombra sutil === */
 .panel-list .panel-item {
   background: #ffffff;
+  height: auto;
   border-radius: 8px;
   overflow: hidden;
   text-decoration: none;
@@ -1021,18 +1027,19 @@ header img {
   overflow: hidden;
   border-radius: 10px 10px 10px 10px;
 }
+
 .panel-thumb img {
   position: absolute;
   top: 0; left: 0;
   width: 100%;
-  height: 100%;
+  height: auto;
   object-fit: cover;
 }
 
 /* === Overlay centralizado === */
 #modal-overlay {
   position: fixed;
-  top: 20px; left: 0; right: 0; bottom: 0;
+  top: 0px; left: 0; right: 0; bottom: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1044,19 +1051,15 @@ header img {
 #modal-var-legal {
   position: relative;       /* antes podia ser fixed, agora relative */
   width: 60%;
-  max-height: 74vh;    
-  margin-top: 130px;     /* use viewport units pra garantir scroll interno */
+  max-height: 54vh;    
+  margin-top: 0px;     /* use viewport units pra garantir scroll interno */
   display: flex;
   flex-direction: column;
   background-color: transparent;
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-
 }
-
-
-
 
 /* 1) Modal-body passa a preencher todo o interior do modal */
 #modal-var-legal .modal-body {
@@ -1278,8 +1281,6 @@ header img {
 
 }
 
-
-
 /* === MOBILE (até 450px) === */
 @media (max-width: 450px) {
 
@@ -1421,5 +1422,3 @@ header img {
 }
 
 }
-
-
